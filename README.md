@@ -53,6 +53,10 @@ This library is used in Web Apps created by Google Apps Script. The Google Apps 
 
 Currently, there is only one method `server` in this library. The method of `server` is used for managing the histories of the Google Apps Script projects.
 
+# IMPORTANT
+
+This script modifies the Google Apps Script project. Only when you store the latest script in the history database, the Google Apps Script project is not modified. When you load a history of an old script to the Google Apps Script project, the current script is overwritten by the loaded old script. If you don't want to overwrite, please don't click the "Back to ###" button. Please be careful about this.
+
 # Usage
 
 This is an important section. In order to use this library, it is required to do the following flow.
