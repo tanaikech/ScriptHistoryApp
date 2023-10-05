@@ -1,0 +1,72 @@
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+  .wrap {
+    width: 100%;
+    padding: 2% 2% 2% 2%;
+    border: 1px solid #000;
+    box-sizing: border-box;
+  }
+
+  h2.open_h2 {
+    border-bottom: 1px solid #000;
+    margin: 0;
+  }
+
+  h3.open_h3 {
+    border-bottom: 1px solid #000;
+    margin: 1%;
+  }
+
+  .open_textarea {
+    width: 100%;
+    height: 300px;
+  }
+</style>
+
+<body>
+  <h2>Target script ID: <?= scriptId ?></h2>
+  <div>Store <input type="button" class="store_button" id="store_button" value="Store current script to history." onclick="main(this,'','store')"></div>
+  <div>Search <input type="text" class="search" id="search" placeholder="Input search text."><input type="button" class="search_button" id="search_button" value="Search" onclick="main(this,'','search')"></div>
+  <div class="wrap"><?!= data ?></div>
+  <script>
+  function init() {
+    $(".open").hide();
+    $(".btn").click(function () {
+      $(this).next(".open").slideToggle("fast");
+      $(this).toggleClass("active");
+    });
+  }
+
+  function main(self, key, p) {
+    self.value = "Processing...";
+    google.script.url.getLocation(loc => {
+      delete loc.parameter.htmlOutput;
+      let msg = "";
+      if (p == "loadHistory") {
+        loc.parameter.load = key;
+      } else if (p == "deleteHistory") {
+        loc.parameter.deleteDate = key;
+      } else if (p == "store") {
+        msg = "Store current script to history.";
+      } else if (p == "search") {
+        loc.parameter.search = $(".search").val();
+        msg = "Search";
+      }
+      loc.parameter.process = p;
+      loc.parameter.internal = "true";
+      google.script.run.withSuccessHandler(html => {
+        $(".wrap").html(html);
+        init();
+        if (msg) {
+          self.value = msg;
+        }
+      }).doGet(loc);
+    });
+  }
+
+  init();
+  </script>
+</body>
+
+</html>
